@@ -1,0 +1,232 @@
+/* ws/cakiee.css - the cake catching game (watercolor style) */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+:root {
+    --ink: #3b2a22;
+    --accent: #e8a3a0;                   /* changes with the chosen cake (set in cakiee.js) */
+}
+
+body {
+    min-height: 100dvh;
+    overflow: hidden;
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    background: #fdf1e4 url(assets/cakiee-background.jpg) center bottom / cover no-repeat;
+    user-select: none;
+    -webkit-user-select: none;
+    animation: page-in 0.6s ease both;   /* the page fades in, like walking into another room */
+}
+
+@keyframes page-in { from { opacity: 0; } }
+
+.screen { position: fixed; inset: 0; }
+
+/* ---------- step 1: select your cake ---------- */
+.select {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(60px, 8vh, 76px);
+    padding: 16px;
+}
+
+.select h1 {
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+.cakes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(14px, 3vw, 40px);
+}
+
+/* the frame pictures have empty space around them, so we scale them up (133%)
+   and centre them, so the visible frame fills the card */
+.cake-card {
+    position: relative;
+    width: clamp(130px, 24vw, 300px);
+    aspect-ratio: 1;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.2s ease;
+}
+
+.cake-card img { position: absolute; pointer-events: none; }
+.cake-card .frame { width: 133%; left: -16.5%; top: -16.5%; }
+.cake-card .cake  { width: 100%; left: 0; top: 0; }
+
+.cake-card:hover,
+.cake-card:focus-visible { transform: translateY(-3%) scale(1.04); }
+
+.cake-card:focus-visible { outline: 3px solid var(--ink); outline-offset: 8px; border-radius: 16px; }
+
+/* ---------- step 2: the game ---------- */
+.play { touch-action: none; }
+
+#board { display: block; width: 100%; height: 100%; touch-action: none; }
+
+/* the HUD sits above the canvas but lets touches pass through to it */
+.needs,
+.lives { position: absolute; pointer-events: none; }
+
+.needs {
+    top: calc(max(16px, env(safe-area-inset-top)) + 52px);   /* under the Back button */
+    left: max(16px, env(safe-area-inset-left));
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 8px 20px;
+    font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+}
+
+.needs li { display: flex; align-items: center; gap: 6px; transition: opacity 0.3s ease; }
+.needs img { height: clamp(24px, 3.4vw, 34px); width: auto; }
+.needs li.done { opacity: 0.45; }
+
+.lives {
+    top: max(16px, env(safe-area-inset-top));
+    right: max(16px, env(safe-area-inset-right));
+    display: flex;
+    gap: 6px;
+}
+
+.lives img { height: clamp(28px, 4vw, 40px); width: auto; }
+.lives img.hit { animation: heart-hit 0.5s ease-out; }
+
+@keyframes heart-hit { 30% { transform: scale(1.45) rotate(-12deg); } }
+
+.play.shake { animation: shake 0.3s linear; }
+
+@keyframes shake {
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+}
+
+/* ---------- step 3: result ---------- */
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+    background: #fdf1e4 url(assets/cakiee-background.jpg) center bottom / cover no-repeat;   /* fully covers the game */
+}
+
+.ov-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    max-width: 440px;
+    text-align: center;
+}
+
+#ovImg {
+    width: min(52vw, 200px);
+    max-height: 36vh;
+    height: auto;
+    object-fit: contain;
+}
+
+.ov-card h2 { font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 600; line-height: 1.25; }
+.ov-card p  { font-size: 1.05rem; line-height: 1.6; }
+
+.ov-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 8px; }
+
+.btn {
+    padding: 0.65rem 1.5rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.btn:hover { filter: brightness(0.94); transform: translateY(-1px); }
+.btn:active { filter: brightness(0.88); transform: translateY(0) scale(0.97); }
+.btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+/* ---------- back button (same look as the other game pages) ---------- */
+.corner-btn {
+    position: fixed;
+    z-index: 30;
+    top: max(16px, env(safe-area-inset-top));
+    left: max(16px, env(safe-area-inset-left));
+    padding: 0.5rem 1.1rem;
+    border-radius: 999px;
+    background: rgba(255, 217, 164, 0.55);
+    color: #7a4b2c;                      /* darker than the other pages, so it is easy to read on the light background */
+    font-family: "DynaPuff", system-ui, sans-serif;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    transition: background-color 0.2s ease;
+}
+
+.corner-btn:hover { background: rgba(255, 190, 137, 0.55); }
+.corner-btn:focus-visible { outline: 3px solid #824529; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+    body, .play.shake, .lives img.hit { animation: none; }
+    .cake-card, .btn { transition: none; }
+}
+
+/* ---------- step 0: title screen ---------- */
+.title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(6px, 1.5vh, 14px);
+    padding: 16px;
+    text-align: center;
+    transition: opacity 0.5s ease;
+}
+
+.title.leaving { opacity: 0; }
+
+.title h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+.title-cake {
+    --cake: min(80vw, 450px, 50vh);
+    width: var(--cake);
+    height: auto;
+    margin: calc(var(--cake) * -0.1) 0;
+}
+
+.title-link {
+    color: var(--ink);
+    font-size: 0.95rem;
+    text-underline-offset: 3px;
+}
+
+.title-link:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+    .title { transition: none; }
+}
+
+
+/* the Back button is a <button> now, so it needs these two lines */
+button.corner-btn { border: 0; cursor: pointer; }

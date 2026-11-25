@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cakiee</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Lora:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cakiee.css">
+</head>
+<body>
+
+    <!-- step 0: title screen -->
+    <main class="screen title" id="titleScreen">
+        <h1>Cakiee</h1>
+        <img class="title-cake" src="assets/cake-tri.png" alt="A round cake split into blueberry, matcha and strawberry">
+        <button type="button" class="btn" id="startBtn">Start</button>
+        <!-- TODO: put your own GitHub link here -->
+        <a class="title-link" href="https://github.com/YOUR-USERNAME/YOUR-REPO" target="_blank" rel="noopener">View on GitHub</a>
+    </main>
+
+    <!-- step 1: choose a cake (hidden until Start is clicked) -->
+    <main class="screen select" id="selectScreen" hidden>
+        <h1>Select your cake</h1>
+        <div class="cakes">
+            <button type="button" class="cake-card" data-cake="matcha" aria-label="Matcha cake">
+                <img class="frame" src="assets/matcha-frame.png" alt="">
+                <img class="cake" src="assets/cake-matcha.png" alt="">
+            </button>
+            <button type="button" class="cake-card" data-cake="strawberry" aria-label="Strawberry cake">
+                <img class="frame" src="assets/strawberry-frame.png" alt="">
+                <img class="cake" src="assets/cake-strawberry.png" alt="">
+            </button>
+            <button type="button" class="cake-card" data-cake="blueberry" aria-label="Blueberry cake">
+                <img class="frame" src="assets/blueberry-frame.png" alt="">
+                <img class="cake" src="assets/cake-blueberry.png" alt="">
+            </button>
+        </div>
+    </main>
+
+    <!-- step 2: the game (hidden until a cake is chosen) -->
+    <section class="screen play" id="gameScreen" aria-label="Cakiee game" hidden>
+        <canvas id="board"></canvas>
+        <ul class="needs" id="needs" aria-label="Ingredients you still need"></ul>
+        <div class="lives" id="lives" role="img" aria-label="3 of 3 lives left"></div>
+    </section>
+
+    <!-- step 3: win / lose -->
+    <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="ovTitle" hidden>
+        <div class="ov-card">
+            <img id="ovImg" alt="">
+            <h2 id="ovTitle"></h2>
+            <p id="ovText"></p>
+            <div class="ov-actions">
+                <button type="button" class="btn" id="retryBtn">Try again</button>
+                <button type="button" class="btn btn-soft" id="menuBtn">Choose another cake</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- goes back to the title screen; hidden while the title screen is showing -->
+    <button type="button" class="corner-btn back-btn" id="backBtn" hidden><span aria-hidden="true">&larr;</span> Back</button>
+
+    <script src="cakiee.js"></script>
+</body>
+</html>
